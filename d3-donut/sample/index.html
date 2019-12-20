@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>npm-package</title>
+    <link rel="stylesheet" type="text/css" href="https://www.saramin.co.kr/sri_css/company/pattern.css">
+    <link rel="stylesheet" href="sample.css">
+    <style>
+        .chart11 {position:relative;}
+        .dounutChart_tooltip {position:absolute;top:0;left:0;padding:0 15px;height:43px;box-sizing:border-box;line-height:43px;background:rgba(0,0,0,0.65) repeat;}
+        .dounutChart_tooltip:after {display:table;clear:both;content:"";table-layout:fixed;}
+        .dounutChart_tooltip .tooltip_label {float:left;margin-left:17px;color:#fff;font-size:14px;font-weight:bold;}
+        .dounutChart_tooltip .tooltip_percent {float:left;position:relative;font-size:17px;font-weight:bold;}
+        .dounutChart .label {cursor:pointer}
+        .dounutChart .background {fill:#ddd}
+        .dounutChart .foreground {fill:#ff3b50}
+        .dounutChart .percent {fill:#ff3b50}
+        .dounutChart .percent .num {font-size:20px;font-weight:bold}
+        .dounutChart .percent .currency {font-size:15px}
+
+        .dounutChart ~ .info_list {position:absolute;left:24px;top:85px;display:inline-block;font-weight:bold;width:114px;}
+        .dounutChart ~ .info_list .info_first {float:left;text-align:right;color:#0082ff}
+        .dounutChart ~ .info_list .info_second {float:left;text-align:right;color:#00d5ab}
+        .dounutChart ~ .info_list dt {font-size:14px;letter-spacing:-0.5px;line-height:14px}
+        .dounutChart ~ .info_list .percent {font-size:28px;letter-spacing:-1px;}
+        .dounutChart ~ .info_list .percent span {font-size:14px;letter-spacing:-0.5px}
+        .dounutChart ~ .info_list .value {color:#888;font-size:13px}
+        .dounutChart ~ .info_list:after {display:table;clear:both;content:"";table-layout:fixed}
+        .dounutChart ~ .info_list>dl {float:left;width:52px;color:#0082ff;font-size:14px;letter-spacing:-1px}
+        .dounutChart ~ .info_list>dl.info_second {margin-left:9px;color:#00a37f}
+        .dounutChart ~ .info_list .percent {font-size:28px;font-weight:bold;line-height:28px}
+        .dounutChart ~ .info_list .unit {font-size:14px;letter-spacing:-0.5px;vertical-align:text-bottom}
+        .dounutChart ~ .info_list .num {margin-top:-4px;color:#888;font-size:13px}
+        .dounutChart .labelLine {stroke:#d9d9d9}
+        .dounutChart .label,
+        .dounutChart .label_score {font-size:14px;fill:#666}
+        .chart000 {position:relative;}
+        .chart000 .dounutChart .label {fill:#fff}
+        .chart000 .tooltip {position:absolute;top:0;left:0;opacity:0;color:#fff;font-size:14px;letter-spacing:-1px;padding:5px 10px 6px 10px;background-color:rgba(0,0,0,0.8);border-radius:5px}
+
+        .columns {display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:space-around}
+        .columns .column {margin-top:20px}
+    </style>
+</head>
+<body>
+<div id="wrap" class="wrap">
+    <div class="box">
+        <h1>DonutChart</h1>
+        <div class="tblType">
+            <table>
+                <colgroup>
+                    <col style="width:15%">
+                    <col style="width:13%">
+                    <col style="width:12%">
+                    <col style="width:30%">
+                    <col style="width:30%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Default</th>
+                    <th scope="col">설명</th>
+                    <th scope="col">비고</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>w</td>
+                    <td>number</td>
+                    <td>300</td>
+                    <td>차트의 넓이</td>
+                    <td>넓이는 최종 w 으로 생성된다.</td>
+                </tr>
+                <tr>
+                    <td>h</td>
+                    <td>number</td>
+                    <td>300</td>
+                    <td>차트의 높이</td>
+                    <td>높이는 최종 h 으로 생성된다.</td>
+                </tr>
+                <tr>
+                    <td>translateX</td>
+                    <td>number</td>
+                    <td>100</td>
+                    <td>차트위 X축 위치</td>
+                    <td>차트 W/2 값으로 넣으면 된다.</td>
+                </tr>
+                <tr>
+                    <td>translateY</td>
+                    <td>number</td>
+                    <td>100</td>
+                    <td>차트위 Y축 위치</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>padAngle</td>
+                    <td>number</td>
+                    <td>0.01</td>
+                    <td>항목간 간격</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>outerRadius</td>
+                    <td>number</td>
+                    <td>100</td>
+                    <td>차트의 바깥 반지름</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>innerRadius</td>
+                    <td>number</td>
+                    <td>50</td>
+                    <td>차트의 안쪽 반지름</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>colorScheme</td>
+                    <td>array</td>
+                    <td>['#3fa1ff', '#00d5ab']</td>
+                    <td>차트의 색상</td>
+                    <td>색상은 데이터 들어오는 순서랑 매칭시켜야 한다.</td>
+                </tr>
+                <tr>
+                    <td>wrapClass</td>
+                    <td>string</td>
+                    <td>dounutChart</td>
+                    <td>차트의 클래스명</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>sortData</td>
+                    <td>string</td>
+                    <td>asc</td>
+                    <td>asc, des, null</td>
+                    <td>오름차순,내림차순,데이터순 (a.item - b.item)</td>
+                </tr>
+                <tr>
+                    <td>toolTip</td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>툴팁여부</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>tooltipX</td>
+                    <td>number</td>
+                    <td>0</td>
+                    <td>툴팁 X 축 조정값</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>tooltipY</td>
+                    <td>number</td>
+                    <td>0</td>
+                    <td>툴팁 Y 축 조정값</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>toolTipTpl</td>
+                    <td>null</td>
+                    <td>''</td>
+                    <td>툴팁의 템플릿화</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>labels</td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>좌측 숫자와 가로선의 가로 여백</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>mode</td>
+                    <td>string</td>
+                    <td>null</td>
+                    <td>gauge, pie, pie2, null</td>
+                    <td>차트의 종류</td>
+                </tr>
+                <tr>
+                    <td>total</td>
+                    <td>number</td>
+                    <td>100</td>
+                    <td>기준값</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>descAxisY</td>
+                    <td>string</td>
+                    <td>'0'</td>
+                    <td>string으로 입력</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>currency</td>
+                    <td>string</td>
+                    <td>null</td>
+                    <td>툴팁 표현시 단위값</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <h2>mode: null</h2>
+                <div class="wrap_chart chart000"></div>
+            </div>
+            <div class="column">
+                <h2>mode: pie2</h2>
+                <div class="wrap_chart chart01"></div>
+            </div>
+            <div class="column">
+                <h2>mode: gauge</h2>
+                <div class="wrap_chart chart08"></div>
+            </div>
+            <div class="column">
+                <h2>mode: pie</h2>
+                <div class="wrap_chart chart11"></div>
+            </div>
+            <div class="column">
+                <h2>mode: null</h2>
+                <div class="wrap_chart chart12"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="test/build.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+
+        new UI.DonutChart('.chart08', {
+            w: 76,
+            h: 76,
+            translateX: 38,
+            translateY: 38,
+            outerRadius: 38,
+            innerRadius: 34,
+            colorScheme: ["#ff3b50", "#fff"],
+            labels:false,
+            mode: "gauge",
+            descAxisY: "5px",
+            currency: '%'
+        }, [
+            [
+                {"label":"표절가능성", "value": 60}
+            ]
+        ]);
+
+
+        new UI.DonutChart('.chart01', {
+            w: 350,
+            h: 350,
+            translateX: 175,
+            translateY: 175,
+            outerRadius: 90,
+            innerRadius: 60,
+            sortData: null,
+            padAngle: 0.02,
+            colorScheme: ["#8bc8ff", "#053cb2", "#3fa1ff", "#082564", "#2365f2", "#00d5ab"],
+            toolTip: true,
+            mode: "pie2"
+        }, [
+            [
+                {item:"개방성", value:0},
+                {item:"외향성", value:0},
+                {item:"성실성", value:1},
+                {item:"정서안정성", value:2},
+                {item:"원만성", value:0},
+                {item:"정직겸손성", value:0}
+            ]
+        ]);
+
+        new UI.DonutChart('.chart000', {
+            w: 220,
+            h: 220,
+            translateX: 110,
+            translateY: 110,
+            sortData: 'asc',
+            padAngle: 0.04,
+            outerRadius: 110,
+            innerRadius: 60,
+            tooltipX: -80,
+            tooltipY: -60,
+            toolTip: true,
+            toolTipTpl:'<div>{{key}}</div>',
+            dataFillZero: true,
+            colorScheme: ["#8bc8ff", "#053cb2", "#3fa1ff", "#082564", "#2365f2", "#00d5ab"]
+        }, [
+            [
+                {item:"개방성", value:0},
+                {item:"외향성", value:20},
+                {item:"성실성", value:30},
+                {item:"정서안정성", value:40},
+                {item:"원만성", value:50},
+                {item:"정직겸손성", value:60}
+            ]
+        ]);
+        new UI.DonutChart('.chart08', {
+            w: 76,
+            h: 76,
+            translateX: 38,
+            translateY: 38,
+            outerRadius: 38,
+            innerRadius: 34,
+            colorScheme: ["#ff3b50", "#fff"],
+            labels:false,
+            mode: "gauge",
+            descAxisY: "5px",
+            currency: '%'
+        }, [
+            [
+                {"label":"표절가능성", "value": 60}
+            ]
+        ]);
+        const chartGender = JSON.parse('[[{"item":"\ub0a8\uc790","value":"1"},{"item":"\uc5ec\uc790","value":3}]]');
+        new UI.DonutChart('.chart11', {
+            w: 172,
+            h: 172,
+            translateX: 86,
+            translateY: 86,
+            padAngle: 0.04,
+            outerRadius: 86,
+            innerRadius: 66,
+            sortData: null,
+            toolTip: true,
+            mode: "pie",
+            toolTipTpl:'<dl class="info_first"><dt>{{key}}</dt><dd class="percent">{{percent}}<span class="unit">%</span></dd><dd class="value">{{value}}명</dd></dl>' +
+                '<dl class="info_second"><dt>{{key}}</dt><dd class="percent">{{percent}}<span class="unit">%</span></dd><dd class="value">{{value}}명</dd></dl>',
+        }, chartGender);
+
+        new UI.DonutChart('.chart12', {
+            w: 240,
+            h: 240,
+            translateX: 120,
+            translateY: 120,
+            outerRadius: 120,
+            padAngle: 0.02,
+            innerRadius: 0,
+            dataFillZero: true,
+            colorScheme: ["#8bc8ff", "#3fa1ff", "#2365f2", "#053cb2", "#082564"],
+        }, [
+            [
+                {item:"A 적극추천", value:0},
+                {item:"B+ 추천", value:0},
+                {item:"B 보통", value:0},
+                {item:"C 검증필요", value:10},
+                {item:"D 비추천", value:0},
+            ]
+        ]);
+
+    });
+</script>
+</body>
+</html>

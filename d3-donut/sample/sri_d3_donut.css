@@ -1,0 +1,4 @@
+.dounutChart_tooltip {position:absolute;top:0;left:0;padding:0 15px;height:43px;box-sizing:border-box;line-height:43px;background:rgba(0,0,0,0.65) repeat;}
+.dounutChart_tooltip:after {display:table;clear:both;content:"";table-layout:fixed;}
+.dounutChart_tooltip .tooltip_label {float:left;margin-left:17px;color:#fff;font-size:14px;font-weight:bold;}
+.dounutChart_tooltip .tooltip_percent {float:left;position:relative;font-size:17px;font-weight:bold;}
